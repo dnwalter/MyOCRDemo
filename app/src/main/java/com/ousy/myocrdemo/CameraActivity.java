@@ -1,13 +1,16 @@
 package com.ousy.myocrdemo;
 
+import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -32,7 +35,7 @@ import java.io.IOException;
  * Created by ousiyuan on 2019/3/28 0028.
  * description:
  */
-public class CameraActivity extends AppCompatActivity {
+public class CameraActivity extends Activity {
     private RecCameraView mRecCameraView;
     private ImageView ivPreview;
     private ImageView ivAll;
@@ -53,6 +56,11 @@ public class CameraActivity extends AppCompatActivity {
         ivPreview = findViewById(R.id.iv_preview);
         ivAll = findViewById(R.id.iv_all);
         tvHint = findViewById(R.id.tv_hint);
+
+        // 隐藏状态栏
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+//            getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);  //设置全屏
+//        }
 
         initParams();
         if (isNativeManual){

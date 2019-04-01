@@ -428,8 +428,8 @@ public class Camera1Control implements ICameraControl {
 
         if (parameters != null && camera != null && width > 0) {
             optSize = getOptimalSize(camera.getParameters().getSupportedPreviewSizes());
-            parameters.setPreviewSize(optSize.width, optSize.height);
             previewView.setRatio(1.0f * optSize.width / optSize.height);
+            parameters.setPreviewSize( optSize.width * previewView.getScale(), optSize.height * previewView.getScale());
 
             camera.setDisplayOrientation(getSurfaceOrientation());
             stopPreview();
@@ -521,6 +521,9 @@ public class Camera1Control implements ICameraControl {
 
         private float ratio = 0.75f;
 
+        // 预览效果被放大的比例
+        private float scale = 0f;
+
         void setTextureView(TextureView textureView) {
             this.textureView = textureView;
             removeAllViews();
@@ -535,6 +538,11 @@ public class Camera1Control implements ICameraControl {
 
         public PreviewView(Context context) {
             super(context);
+        }
+
+        // 当预览效果进行的放大，相应的相机预览配置也要进行一定放大
+        public int getScale(){
+            return (int) scale + 1;
         }
 
         @Override
@@ -556,6 +564,25 @@ public class Camera1Control implements ICameraControl {
 
             int l = (getWidth() - width) / 2;
             int t = (getHeight() - height) / 2;
+
+            // 有些手机隐藏状态栏后，计算适合的宽高比时，预览效果没占满整个控件
+            // 这里保证预览效果占满控件
+            if (l > 10 || t > 10){
+                if (l > 0){
+                    scale = getWidth() * 1f / width;
+                    width = getWidth();
+                    height = (int) (height * scale);
+                }else if (t > 0){
+                    scale = getHeight() * 1f / height;
+                    height = getHeight();
+                    width = (int) (width * scale);
+                }
+
+                l = (getWidth() - width) / 2;
+                t = (getHeight() - height) / 2;
+            }else{
+                scale = 0;
+            }
 
             previewFrame.left = l;
             previewFrame.top = t;
