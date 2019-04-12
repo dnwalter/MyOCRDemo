@@ -47,7 +47,7 @@ public class RecognizeUtil {
             @Override
             public void onError(OCRError error) {
                 error.printStackTrace();
-                Toast.makeText(context, "licence方式获取token失败\n" + error.getMessage(), Toast.LENGTH_SHORT).show();
+//                Toast.makeText(context, "licence方式获取token失败\n" + error.getMessage(), Toast.LENGTH_SHORT).show();
             }
         }, context.getApplicationContext());
     }

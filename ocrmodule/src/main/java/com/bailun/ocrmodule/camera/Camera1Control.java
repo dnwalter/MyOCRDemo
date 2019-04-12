@@ -428,9 +428,12 @@ public class Camera1Control implements ICameraControl {
 
         if (parameters != null && camera != null && width > 0) {
             optSize = getOptimalSize(camera.getParameters().getSupportedPreviewSizes());
-            previewView.setRatio(1.0f * optSize.width / optSize.height);
-            parameters.setPreviewSize( optSize.width * previewView.getScale(), optSize.height * previewView.getScale());
+            // 这个方法不适配360手机，360手机摄像头会变黑白
+//            previewView.setRatio(1.0f * optSize.width / optSize.height);
+//            parameters.setPreviewSize( optSize.width * previewView.getScale(), optSize.height * previewView.getScale());
 
+            parameters.setPreviewSize(optSize.width, optSize.height);
+            previewView.setRatio(1.0f * optSize.width / optSize.height);
             camera.setDisplayOrientation(getSurfaceOrientation());
             stopPreview();
             try {
@@ -567,7 +570,7 @@ public class Camera1Control implements ICameraControl {
 
             // 有些手机隐藏状态栏后，计算适合的宽高比时，预览效果没占满整个控件
             // 这里保证预览效果占满控件
-            if (l > 10 || t > 10){
+            if (l > 2 || t > 2){
                 if (l > 0){
                     scale = getWidth() * 1f / width;
                     width = getWidth();
