@@ -68,7 +68,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void onScan(View view){
-        if (!RecognizeUtil.getInstance().isHasGotToken())
+        if (!RecognizeUtil.getInstance().checkTokenStatus(this))
             return;
         //  初始化本地质量控制模型,释放代码在onDestory中
         //  调用身份证扫描必须加上 intent.putExtra(CameraActivity.KEY_NATIVE_MANUAL, true); 关闭自动初始化和释放本地模型
