@@ -40,6 +40,7 @@ public class RecognizeUtil {
             @Override
             public void onResult(AccessToken result) {
                 mHasGotToken = true;
+                mGotTokenError= false;
             }
 
             @Override
