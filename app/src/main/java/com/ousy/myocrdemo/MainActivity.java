@@ -23,7 +23,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         mPath = new File(getFilesDir(), "pic.jpg").getAbsolutePath();
 
-        RecognizeUtil.getInstance().initAccessToken(this);
+        RecognizeUtil.getInstance().initAccessTokenWithAkSk(this);
 
 
     }

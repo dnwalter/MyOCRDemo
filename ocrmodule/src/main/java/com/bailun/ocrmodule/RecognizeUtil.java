@@ -1,6 +1,7 @@
 package com.bailun.ocrmodule;
 
 import android.content.Context;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.baidu.ocr.sdk.OCR;
@@ -22,16 +23,32 @@ public class RecognizeUtil {
 
     private static RecognizeUtil sInstance;
     private boolean mHasGotToken = false;
-
-    public boolean isHasGotToken(){
-        return mHasGotToken;
-    }
+    private boolean mGotTokenError = false;
 
     public static synchronized RecognizeUtil getInstance() {
         if (sInstance == null) {
             sInstance = new RecognizeUtil();
         }
         return sInstance;
+    }
+
+    /**
+     * 用明文ak，sk初始化
+     */
+    public void initAccessTokenWithAkSk(Context context) {
+        OCR.getInstance(context).initAccessTokenWithAkSk(new OnResultListener<AccessToken>() {
+            @Override
+            public void onResult(AccessToken result) {
+                mHasGotToken = true;
+            }
+
+            @Override
+            public void onError(OCRError error) {
+                error.printStackTrace();
+                mGotTokenError = true;
+                Log.e("Recoginize", "licence方式获取token失败\n" + error.getMessage());
+            }
+        }, context.getApplicationContext(),  "e76accfxp5LU0AKmTA9F05XD", "nu329KyFoIZX3lTsLj53rcOhFlcMWw45");
     }
 
     /**
@@ -47,14 +64,19 @@ public class RecognizeUtil {
             @Override
             public void onError(OCRError error) {
                 error.printStackTrace();
-//                Toast.makeText(context, "licence方式获取token失败\n" + error.getMessage(), Toast.LENGTH_SHORT).show();
+                mGotTokenError = true;
+                Log.e("Recoginize", "licence方式获取token失败\n" + error.getMessage());
             }
         }, context.getApplicationContext());
     }
 
-    private boolean checkTokenStatus(Context context) {
+    public boolean checkTokenStatus(Context context) {
+        if (mGotTokenError){
+            Toast.makeText(context, "系统繁忙，请再次进入页面点击重试", Toast.LENGTH_LONG).show();
+            return false;
+        }
         if (!mHasGotToken) {
-            Toast.makeText(context, "token还未成功获取", Toast.LENGTH_LONG).show();
+            Toast.makeText(context, "token还未成功获取，请稍等", Toast.LENGTH_LONG).show();
         }
         return mHasGotToken;
     }
