@@ -248,38 +248,10 @@ public class RecCameraView extends ConstraintLayout {
         int height = rotation % 180 == 0 ? decoder.getHeight() : decoder.getWidth();
 
         // 要裁剪的4个位置
-        int left = width * viewFrame.getLeft() / getWidth();
-        int top = height * viewFrame.getTop()/ getHeight();
-        int right = width * viewFrame.getRight()/ getWidth();
-        int bottom = height * viewFrame.getBottom()/ getHeight();
-
-        // 高度大于图片
-        if (previewFrame.top < 0) {
-            // 宽度对齐。
-            int adjustedPreviewHeight = previewFrame.height() * getWidth() / previewFrame.width();
-            int topInFrame = ((adjustedPreviewHeight - viewFrame.getHeight()) / 2)
-                    * getWidth() / previewFrame.width();
-            int bottomInFrame = ((adjustedPreviewHeight + viewFrame.getHeight()) / 2) * getWidth()
-                    / previewFrame.width();
-
-            // 等比例投射到照片当中。
-            top = topInFrame * height / previewFrame.height();
-            bottom = bottomInFrame * height / previewFrame.height();
-        } else {
-            // 宽度大于图片
-            if (previewFrame.left < 0) {
-                // 高度对齐
-                int adjustedPreviewWidth = previewFrame.width() * getHeight() / previewFrame.height();
-                int leftInFrame = ((adjustedPreviewWidth - viewFrame.getWidth()) / 2) * getHeight()
-                        / previewFrame.height();
-                int rightInFrame = ((adjustedPreviewWidth + viewFrame.getWidth()) / 2) * getHeight()
-                        / previewFrame.height();
-
-                // 等比例投射到照片当中。
-                left = leftInFrame * width / previewFrame.width();
-                right = rightInFrame * width / previewFrame.width();
-            }
-        }
+        int left = (viewFrame.getLeft() - previewFrame.left) * width / previewFrame.width();
+        int top = (viewFrame.getTop() - previewFrame.top) * height / previewFrame.height();
+        int right = (viewFrame.getRight() - previewFrame.left) * width / previewFrame.width();
+        int bottom = (viewFrame.getBottom() - previewFrame.top) * height / previewFrame.height();
 
         Rect region = new Rect();
         region.left = left;
