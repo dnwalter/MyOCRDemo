@@ -244,7 +244,7 @@ public class RecCameraView extends ConstraintLayout {
 
 
 
-        int width = rotation % 180 == 0 ? decoder.getWidth() : decoder.getHeight();
+        int width = rotation % 180 == 0 ?  decoder.getWidth() : decoder.getHeight();
         int height = rotation % 180 == 0 ? decoder.getHeight() : decoder.getWidth();
 
         // 要裁剪的4个位置
